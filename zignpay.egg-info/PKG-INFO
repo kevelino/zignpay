@@ -1,0 +1,27 @@
+Metadata-Version: 2.1
+Name: zignpay
+Version: 0.1
+Summary: A package to manage mobile payments using the MTN MoMo and Orange Money APIs
+Home-page: https://github.com/kevelino/zignpay
+Author: Kevelino
+Author-email: kevinnengou02@gmail.com
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENCE
+
+# ZIGNPAY
+
+A package to manage mobile payments using the MTN MoMo and Orange Money APIs
+
+## Installation
+
+```bash
+  pip install zignpay
+```
+
+
