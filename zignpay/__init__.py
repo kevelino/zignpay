@@ -1,1 +1,1 @@
-from momo.sdk import MomoApiProvisioning, MomoCollection
+from .momo.sdk import MomoApiProvisioning, MomoCollection
