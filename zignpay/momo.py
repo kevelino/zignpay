@@ -4,12 +4,62 @@ import requests
 import uuid
 import time
 
+
+country = {
+  "CM" : {
+    "currency" : "XAF",
+    "target_environment" : "mtncameroon"
+  },
+  "UG" : {
+    "currency" : "UGX",
+    "target_environment" : "mtnuganda"
+  },
+  "GH" : {
+    "currency" : "GHS",
+    "target_environment" : "mtnghana"
+  },
+  "CI" : {
+    "currency" : "XOF",
+    "target_environment" : "mtnivorycoast"
+  },
+  "ZM" : {
+    "currency" : "ZMW",
+    "target_environment" : "mtnzambia"
+  },
+  "BJ" : {
+    "currency" : "XOF",
+    "target_environment" : "mtnbenin"
+  },
+  "CG" : {
+    "currency" : "XAF",
+    "target_environment" : "mtncongo"
+  },
+  "CZ" : {
+    "currency" : "CZL",
+    "target_environment" : "mtnswaziland"
+  },
+  "GN" : {
+    "currency" : "GNF",
+    "target_environment" : "mtnguineaconakry"
+  },
+  "ZA" : {
+    "currency" : "ZAR",
+    "target_environment" : "mtnsouthafrica"
+  },
+  "LR" : {
+    "currency" : "LRD",
+    "target_environment" : "mtnliberia"
+  }
+}
+
+
+
 # Initialize MoMo Api Provisioning
 class MomoApiProvisioning():
-  def __init__(self, subscription_key, referenceId, environment):
-    self.subscription_key = subscription_key
-    self.referenceId = referenceId
-    self.environment = environment
+  def __init__(self, params):
+    self.subscription_key = str(params["subscription_key"])
+    self.referenceId = str(uuid.uuid4())
+    self.environment = str(params["environment"])
     self.target_environment = "mtncameroon" if self.environment == "PROD" else "sandbox"
     self.baseUrl = "https://proxy.momoapi.mtn.com" if self.environment == "PROD" else "https://sandbox.momodeveloper.mtn.com"
     self.api_user = None
@@ -41,9 +91,6 @@ class MomoApiProvisioning():
   def create_api_key(self):
     url = self.baseUrl+f"/v1_0/apiuser/{self.referenceId}/apikey"
     
-    print(url)
-    print(self.referenceId)
-    
     headers = {
       'Ocp-Apim-Subscription-Key': self.subscription_key
     }
@@ -58,14 +105,14 @@ class MomoApiProvisioning():
     
     
 class MomoCollection(MomoApiProvisioning):
-  def __init__(self, subscription_key, api_user_id, api_key, environment, currency = None):
-    self.subscription_key = subscription_key
-    self.environment = environment
-    self.currency = currency if self.environment == "PROD" else "EUR"
-    self.target_environment = "mtncameroon" if self.environment == "PROD" else "sandbox"
+  def __init__(self, params):
+    self.subscription_key = str(params['subscription_key'])
+    self.environment = str(params['environment'])
+    self.currency = country[str(params['country_code'])]['currency'] if self.environment == "PROD" else "EUR"
+    self.target_environment = country[str(params['country_code'])]['target_environment'] if self.environment == "PROD" else "sandbox"
     self.baseUrl = "https://proxy.momoapi.mtn.com" if self.environment == "PROD" else "https://sandbox.momodeveloper.mtn.com"
-    self.api_user_id = api_user_id
-    self.api_key = api_key
+    self.api_user_id = str(params['api_user_id'])
+    self.api_key = str(params['api_key'])
 
   #get access token
   def get_access_token(self):
@@ -79,7 +126,6 @@ class MomoCollection(MomoApiProvisioning):
     response = requests.post(url, headers=headers)
     if response.status_code == 200:
       access_token = response.json()["access_token"]
-      print(access_token)
       return access_token
     else:
       return encode
@@ -89,7 +135,7 @@ class MomoCollection(MomoApiProvisioning):
     url = self.baseUrl+"/collection/v1_0/requesttopay"
     payload = json.dumps({
       "amount": str(values["amount"]),
-      "currency": str(values["currency"]),
+      "currency": str(self.currency),
       "externalId": str(values["reference_id"]),
       "payer": {
       "partyIdType": "MSISDN",
@@ -111,8 +157,6 @@ class MomoCollection(MomoApiProvisioning):
     }
     response = requests.post(url, headers=headers, data=payload)
     
-    print(response.status_code)
-
     if response.status_code == 202:
       status = "PENDING"
       status_response = None
