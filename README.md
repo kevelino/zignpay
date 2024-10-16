@@ -111,7 +111,7 @@ __Make a payment request__
 
 Example query result
 
-```json
+```python
   {
     'financialTransactionId': '490639485', 
     'externalId': '123456789', 
