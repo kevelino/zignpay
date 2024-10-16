@@ -1,0 +1,39 @@
+[build-system]
+# A list of packages that are needed to build your package:
+requires = ["setuptools"]  # REQUIRED if [build-system] table is used
+# The name of the Python object that frontends will use to perform the build:
+build-backend = "setuptools.build_meta"  # If not defined, then legacy behavior can happen.
+
+[project]
+name = "zignpay"
+
+version = "0.1.0"
+
+description = "A package to manage mobile payments using the MTN MoMo and Orange Money APIs"
+
+readme = "README.md"
+
+requires-python = ">=3.8"
+
+license = {file = "LICENSE"}
+
+keywords = ["sample", "setuptools", "development"]
+
+authors = [
+  {name = "Kevelino", email = "kevinnengou02@gmail.com" }
+]
+
+maintainers = [
+  {name = "Kevelino", email = "kevinnengou02@gmail.com" }
+]
+
+dependencies = []
+
+[project.urls]
+"Homepage" = "https://github.com/kevelino/zignpay"
+"Bug Reports" = "https://github.com/kevelino/zignpay/issues"
+"Funding" = "https://donate.pypi.org"
+"Source" = "https://github.com/kevelino/zignpay/"
+
+[project.scripts]
+sample = "zignpay:main"

@@ -1,4 +1,14 @@
-/client.py
-/.vscode
-/.vscode/
+# general things to ignore
+build/
+dist/
 .vscode/
+/client.py
+*.egg-info/
+*.egg
+*.py[cod]
+__pycache__/
+venv/
+
+# due to using nox and pytest
+.nox
+.cache
