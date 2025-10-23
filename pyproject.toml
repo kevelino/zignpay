@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"  # If not defined, then legacy behavior 
 [project]
 name = "zignpay"
 
-version = "0.1.0"
+version = "0.2.1"
 
 description = "A package to manage mobile payments using the MTN MoMo and Orange Money APIs"
 
