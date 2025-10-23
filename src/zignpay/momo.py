@@ -158,20 +158,33 @@ class MomoCollection(MomoApiProvisioning):
     response = requests.post(url, headers=headers, data=payload)
     
     if response.status_code == 202:
-      status = "PENDING"
-      status_response = None
-      while status == "PENDING":
-        time.sleep(5)
-        url = self.baseUrl+"/collection/v1_0/requesttopay/"+str(Xreference)
+      url = self.baseUrl+"/collection/v1_0/requesttopay/"+str(Xreference)
 
-        headers = {
-          'Ocp-Apim-Subscription-Key': self.subscription_key,
-          'X-Target-Environment': self.target_environment,
-          'Authorization': 'Bearer '+str(self.get_access_token())
-        }
+      headers = {
+        'Ocp-Apim-Subscription-Key': self.subscription_key,
+        'X-Target-Environment': self.target_environment,
+        'Authorization': 'Bearer '+str(self.get_access_token())
+      }
 
-        status_response = requests.get(url, headers=headers)
-        status = status_response.json()['status']
+      status_response = requests.get(url, headers=headers)
+      return status_response.json()
+    else:
+      return response.status_code
+    
+  def request_to_pay_status(self, referenceId: str):
+    url = self.baseUrl+f"/collection/v1_0/requesttopay/{referenceId}"
+
+    payload = {}
+    headers = {
+      'Ocp-Apim-Subscription-Key': self.subscription_key,
+      'X-Target-Environment': self.target_environment,
+      'Authorization': 'Bearer '+str(self.get_access_token())
+    }
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+
+    if response.status_code == 200:
+      status_response = requests.get(url, headers=headers)
       return status_response.json()
     else:
       return response.status_code
